@@ -1,176 +1,70 @@
 # Library Management System
 
-A Java Desktop GUI Application built with JavaFX for managing a library system. This project demonstrates Object-Oriented Programming principles and design patterns.
-
-## System Architecture
-
-The application follows a layered architecture:
-
-```
-┌─────────────────────────────────────┐
-│         GUI Layer (JavaFX)          │
-│  Login, ManageBooks, ManageUsers,   │
-│      BorrowReturn Screens           │
-└─────────────────────────────────────┘
-                  │
-┌─────────────────────────────────────┐
-│         Service Layer                │
-│      LibraryService                  │
-└─────────────────────────────────────┘
-                  │
-┌─────────────────────────────────────┐
-│      Factory Pattern Layer          │
-│   BookFactory, UserFactory          │
-└─────────────────────────────────────┘
-                  │
-┌─────────────────────────────────────┐
-│      Singleton Pattern Layer        │
-│  DatabaseConnectionManager, Logger  │
-└─────────────────────────────────────┘
-                  │
-┌─────────────────────────────────────┐
-│         Model Layer                  │
-│  Book, User, BorrowRecord           │
-└─────────────────────────────────────┘
-                  │
-┌─────────────────────────────────────┐
-│         Database (SQLite)           │
-└─────────────────────────────────────┘
-```
-
-## Project Structure
-
-```
-src/main/java/com/library/
-├── model/                    # Model classes
-│   ├── Book.java            # Abstract book class
-│   ├── SoftwareEngineeringBook.java
-│   ├── ManagementBook.java
-│   ├── AIBook.java
-│   ├── User.java            # Abstract user class
-│   ├── Admin.java
-│   ├── RegularUser.java
-│   └── BorrowRecord.java
-├── factory/                  # Factory pattern implementation
-│   ├── BookFactory.java
-│   └── UserFactory.java
-├── singleton/                # Singleton pattern implementation
-│   ├── DatabaseConnectionManager.java
-│   └── Logger.java
-├── gui/                      # GUI screens
-│   ├── LoginScreen.java
-│   ├── MainMenuScreen.java
-│   ├── ManageBooksScreen.java
-│   ├── ManageUsersScreen.java
-│   └── BorrowReturnScreen.java
-├── util/                     # Utility classes
-│   └── LibraryService.java
-└── LibraryApplication.java   # Main application class
-```
-
-## OOP Concepts Implemented
-
-### 1. Encapsulation
-- All model classes use private fields with public getters/setters
-- Singleton classes use private constructors
-- Factory classes encapsulate object creation logic
-
-### 2. Inheritance
-- `Book` abstract class with subclasses: `SoftwareEngineeringBook`, `ManagementBook`, `AIBook`
-- `User` abstract class with subclasses: `Admin`, `RegularUser`
-- `LibraryApplication` extends JavaFX `Application`
-
-### 3. Polymorphism
-- Abstract methods in `Book` and `User` classes are overridden in subclasses
-- Factory methods return abstract types (`Book`, `User`) but create concrete instances
-- Method overriding for `getCategory()`, `getRole()`, `isAdmin()`
-
-### 4. Abstraction
-- Abstract `Book` class defines common interface without implementation
-- Abstract `User` class defines common interface without implementation
-- Abstract methods enforce contract for subclasses
-
-## Design Patterns
-
-### Singleton Pattern
-
-**DatabaseConnectionManager**
-- Ensures only one database connection exists
-- Provides global access point via `getInstance()`
-- Manages SQLite database connection and initialization
-
-**Logger**
-- Ensures only one logger instance exists
-- Provides centralized logging functionality
-- All log entries go to the same file
-
-### Factory Pattern
-
-**BookFactory**
-- Creates different book types without exposing creation logic
-- Returns abstract `Book` type (polymorphism)
-- Easy to extend with new book categories
-
-**UserFactory**
-- Creates different user types without exposing creation logic
-- Returns abstract `User` type (polymorphism)
-- Easy to extend with new user roles
+A Java desktop application for managing a library's catalogue, user accounts, and book loans. The application uses JavaFX for its interface and SQLite for local data persistence. It is also packaged with Docker and can be accessed through a browser using noVNC.
 
 ## Features
 
-1. **User Authentication**
-   - Login screen with username/password
-   - Role-based access control (Admin vs Regular User)
+- **Authentication and roles:** Sign in as an administrator or regular user. User administration is restricted to administrators.
+- **Book catalogue:** Add, view, update, and remove books. Supported categories are Software Engineering, Management, and Artificial Intelligence.
+- **User administration:** Administrators can create, view, update, and delete user accounts.
+- **Loans and returns:** Browse available books, borrow and return books, and view personal loan history, including borrow and return dates.
+- **Persistence:** Store books, users, and loan records in SQLite.
+- **Activity logging:** Record application activity and errors with INFO, WARNING, and ERROR levels.
+- **Automated tests:** JUnit tests cover factory mappings and core library service workflows.
 
-2. **Book Management**
-   - Add, Update, Delete books
-   - View all books in a table
-   - Support for multiple book categories (Software Engineering, Management, AI)
+## Technology stack
 
-3. **User Management** (Admin only)
-   - Add, Update, Delete users
-   - Create Admin or Regular User accounts
-   - View all users in a table
+| Area | Technology |
+| --- | --- |
+| Language | Java (source and target compatibility: 11; Java 17 recommended) |
+| Desktop UI | JavaFX 17.0.2 |
+| Build and dependency management | Apache Maven |
+| Database | SQLite with SQLite JDBC 3.36.0.3 |
+| Testing | JUnit Jupiter 5.10.2, Maven Surefire 3.2.5 |
+| Containerization | Docker and Docker Compose |
+| Browser-based desktop access | Xvfb, x11vnc, and noVNC |
+| Continuous integration | GitHub Actions |
 
-4. **Borrow/Return Books**
-   - View available books
-   - Borrow books (updates availability)
-   - Return books (updates availability)
-   - View personal borrowing history
+## Architecture
 
-5. **Logging**
-   - All important actions are logged
-   - Logs saved to `library.log` file
-   - Different log levels (INFO, WARNING, ERROR)
+The application separates the JavaFX interface from its library operations and persistence:
 
-## Requirements
+```text
+JavaFX screens
+      |
+LibraryService
+      |
+Factories and domain models
+      |
+DatabaseConnectionManager ---- SQLite
+Logger ------------------------ library.log
+```
 
-- Java 11 or higher
-- Maven 3.6 or higher
-- SQLite (included via Maven dependency)
+The project demonstrates object-oriented programming concepts including encapsulation, abstraction, inheritance, and polymorphism. The **Factory** pattern creates book and user types; **Singleton** classes manage the database connection and application logger.
 
-## How to Run
+## Getting started
 
-### Using Maven:
+### Run locally
+
+Requirements: JDK 17 (Java 11+ compatible source), and Maven 3.6 or later.
 
 ```bash
 # Run the automated tests
 mvn test
 
-# Compile the project
-mvn clean compile
-
-# Run the application
+# Launch the JavaFX application
 mvn javafx:run
 ```
 
-### Using Docker:
+### Run with Docker
+
+Requirements: Docker with the Compose plugin.
 
 ```bash
 docker compose up --build
 ```
 
-Open [http://localhost:6080/vnc.html?autoconnect=true](http://localhost:6080/vnc.html?autoconnect=true) to use the desktop application in your browser. Docker Compose keeps `library.db` and `library.log` in the `library-data` volume across container restarts.
+Open [http://localhost:6080/vnc.html?autoconnect=true](http://localhost:6080/vnc.html?autoconnect=true) to use the desktop application in your browser. The published port is bound to localhost. Docker Compose stores the database and log files in the persistent `library-data` volume.
 
 Run the test suite inside the container with:
 
@@ -178,44 +72,42 @@ Run the test suite inside the container with:
 docker compose run --rm --no-deps --entrypoint mvn library -B -f /opt/app/pom.xml test
 ```
 
-### Using IDE:
+To stop the application, run `docker compose down`. The named data volume is retained.
 
-1. Import the project as a Maven project
-2. Run `LibraryApplication.java` as a Java application
-3. Make sure JavaFX SDK is configured in your IDE
+## Demo account
 
-## Default Login Credentials
+On first run, the application initializes this administrator account:
 
-- **Username:** admin
-- **Password:** admin123
-- **Role:** Admin
+| Username | Password | Role |
+| --- | --- | --- |
+| `admin` | `admin123` | Administrator |
 
-## Database
+This is a demo/educational application, not a production authentication system. Do not expose it to untrusted users or reuse the demo credentials; passwords are currently stored as plain text in SQLite.
 
-The application uses SQLite database (`library.db`) which is automatically created on first run. The database includes:
+## Data and logs
 
-- `books` table: Stores book information
-- `users` table: Stores user information
-- `borrow_records` table: Stores borrowing transactions
+The database contains `books`, `users`, and `borrow_records` tables. By default, `library.db` and `library.log` are created in the application's working directory. Set `LIBRARY_DATA_DIR` to use another directory; Docker sets it to `/data` and persists that directory in the `library-data` volume.
 
-## Logging
+## Continuous integration
 
-All application logs are written to `library.log` file in the project root directory. Logs include:
-- User login/logout
-- Book operations (add, update, delete)
-- User operations (add, update, delete)
-- Borrow/return transactions
-- Error messages
+The GitHub Actions workflow in `.github/workflows/ci.yml` runs for pushes and pull requests. It sets up Java 17, runs `mvn clean verify` (including the automated tests), and builds the Docker image. The workflow validates the image but does not publish or deploy it.
 
-## Notes
+## Project structure
 
-- This project strictly follows the requirements: Only Singleton and Factory patterns are used
-- No additional design patterns are implemented
-- Code is well-documented with JavaDoc comments
-- Each class includes documentation about OOP concepts and design patterns used
+```text
+src/
+├── main/java/com/library/
+│   ├── factory/     # BookFactory and UserFactory
+│   ├── gui/         # JavaFX login, catalogue, user, and loan screens
+│   ├── model/       # Books, users, and loan records
+│   ├── singleton/   # SQLite connection manager and logger
+│   ├── util/        # LibraryService
+│   └── LibraryApplication.java
+└── test/java/com/library/
+    ├── factory/     # Factory tests
+    └── util/        # Library service workflow tests
+```
 
-## Author
+## License
 
-University Project - Library Management System
-IT-L4 Selected Labs - Project 1
-
+This project is distributed under the [MIT License](LICENSE).
