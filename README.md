@@ -161,6 +161,14 @@ mvn clean compile
 mvn javafx:run
 ```
 
+### Using Docker:
+
+```bash
+docker compose up --build
+```
+
+Open [http://localhost:6080/vnc.html?autoconnect=true](http://localhost:6080/vnc.html?autoconnect=true) to use the desktop application in your browser. Docker Compose keeps `library.db` and `library.log` in the `library-data` volume across container restarts.
+
 ### Using IDE:
 
 1. Import the project as a Maven project

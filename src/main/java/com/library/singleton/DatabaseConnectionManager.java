@@ -1,5 +1,6 @@
 package com.library.singleton;
 
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -26,7 +27,10 @@ public class DatabaseConnectionManager {
     
     // Encapsulation: Private connection
     private Connection connection;
-    private String url = "jdbc:sqlite:library.db";
+    private String url = "jdbc:sqlite:" + Paths.get(
+        System.getenv().getOrDefault("LIBRARY_DATA_DIR", "."),
+        "library.db"
+    ).toAbsolutePath();
     
     // Singleton: Private constructor to prevent instantiation
     private DatabaseConnectionManager() {

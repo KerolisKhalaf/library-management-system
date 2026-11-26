@@ -3,6 +3,7 @@ package com.library.singleton;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -29,7 +30,10 @@ public class Logger {
     
     // Encapsulation: Private fields
     private PrintWriter logWriter;
-    private String logFile = "library.log";
+    private String logFile = Paths.get(
+        System.getenv().getOrDefault("LIBRARY_DATA_DIR", "."),
+        "library.log"
+    ).toString();
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     
     // Singleton: Private constructor to prevent instantiation
