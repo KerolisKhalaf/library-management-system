@@ -43,6 +43,7 @@ public class UserFactory {
                 return new Admin(userId, username, password, email);
                 
             case "regularuser":
+            case "regular user":
             case "regular_user":
             case "user":
                 return new RegularUser(userId, username, password, email);

@@ -41,6 +41,7 @@ public class BookFactory {
         // Factory Pattern: Hide creation logic, return abstract type
         switch (category.toLowerCase()) {
             case "softwareengineering":
+            case "software engineering":
             case "software_engineering":
             case "se":
                 return new SoftwareEngineeringBook(isbn, title, author, year);
@@ -50,6 +51,7 @@ public class BookFactory {
                 return new ManagementBook(isbn, title, author, year);
                 
             case "ai":
+            case "artificial intelligence":
             case "artificial_intelligence":
             case "artificialintelligence":
                 return new AIBook(isbn, title, author, year);

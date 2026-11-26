@@ -41,6 +41,14 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.36.0.3</version>
         </dependency>
+
+        <!-- JUnit 5 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -63,6 +71,18 @@
                 <version>0.0.8</version>
                 <configuration>
                     <mainClass>com.library.LibraryApplication</mainClass>
+                </configuration>
+            </plugin>
+
+            <!-- JUnit 5 test runner and isolated test database directory -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <environmentVariables>
+                        <LIBRARY_DATA_DIR>${project.build.directory}/test-data</LIBRARY_DATA_DIR>
+                    </environmentVariables>
                 </configuration>
             </plugin>
         </plugins>

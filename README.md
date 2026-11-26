@@ -154,6 +154,9 @@ src/main/java/com/library/
 ### Using Maven:
 
 ```bash
+# Run the automated tests
+mvn test
+
 # Compile the project
 mvn clean compile
 
@@ -168,6 +171,12 @@ docker compose up --build
 ```
 
 Open [http://localhost:6080/vnc.html?autoconnect=true](http://localhost:6080/vnc.html?autoconnect=true) to use the desktop application in your browser. Docker Compose keeps `library.db` and `library.log` in the `library-data` volume across container restarts.
+
+Run the test suite inside the container with:
+
+```bash
+docker compose run --rm --no-deps --entrypoint mvn library -B -f /opt/app/pom.xml test
+```
 
 ### Using IDE:
 
